@@ -9,24 +9,29 @@ type Kelvin float64
 const (
 	FreezingC 	Celsius = 0
 	BoilingC	Celsius = 100
+
+	ckDiff 		float64 = 273.15
+	cfDiff		float64 = 32
+	cfFactor	float64 = 5/9
+	fcFactor 	float64 = 9/5
 )
 
 // TODO make constants for conversions
 
 func c2f(c Celsius) Fahrenheit {
-	return Fahrenheit(c * 9/5 + 32)
+	return Fahrenheit(c * Celsius(fcFactor) + Celsius(cfDiff))
 }
 
 func f2c(f Fahrenheit) Celsius {
-	return Celsius((f-32) * 5/9)
+	return Celsius((f-Fahrenheit(cfDiff)) * Fahrenheit(cfFactor))
 }
 
 func c2k(c Celsius) Kelvin {
-	return Kelvin(c + 273.15)
+	return Kelvin(c + Celsius(ckDiff))
 }
 
 func k2c(k Kelvin) Celsius {
-	return Celsius(k - 273.15)
+	return Celsius(k - Kelvin(ckDiff))
 }
 
 func f2k(f Fahrenheit) Kelvin {
