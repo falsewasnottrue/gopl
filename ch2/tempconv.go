@@ -16,30 +16,28 @@ const (
 	fcFactor 	float64 = 9/5
 )
 
-// TODO make constants for conversions
-
-func c2f(c Celsius) Fahrenheit {
+func CToF(c Celsius) Fahrenheit {
 	return Fahrenheit(c * Celsius(fcFactor) + Celsius(cfDiff))
 }
 
-func f2c(f Fahrenheit) Celsius {
+func FToC(f Fahrenheit) Celsius {
 	return Celsius((f-Fahrenheit(cfDiff)) * Fahrenheit(cfFactor))
 }
 
-func c2k(c Celsius) Kelvin {
+func CToK(c Celsius) Kelvin {
 	return Kelvin(c + Celsius(ckDiff))
 }
 
-func k2c(k Kelvin) Celsius {
+func KToC(k Kelvin) Celsius {
 	return Celsius(k - Kelvin(ckDiff))
 }
 
-func f2k(f Fahrenheit) Kelvin {
-	return c2k(f2c(f))
+func FToK(f Fahrenheit) Kelvin {
+	return CToK(FToC(f))
 }
 
-func k2f(k Kelvin) Fahrenheit {
-	return c2f(k2c(k))
+func KToF(k Kelvin) Fahrenheit {
+	return CToF(KToC(k))
 }
 
 
@@ -58,13 +56,13 @@ func (k Kelvin) String() string {
 
 func main() {
 	fmt.Println(FreezingC)
-	fmt.Println(c2f(BoilingC))
-	fmt.Println(c2k(FreezingC))
+	fmt.Println(CToF(BoilingC))
+	fmt.Println(CToK(FreezingC))
 
-	fmt.Println(f2c(c2f(FreezingC)))
-	fmt.Println(k2c(c2k(BoilingC)))
+	fmt.Println(FToC(CToF(FreezingC)))
+	fmt.Println(KToC(CToK(BoilingC)))
 
-	boilingK := c2k(BoilingC)
+	boilingK := CToK(BoilingC)
 	fmt.Println(boilingK)
-	fmt.Println(f2k(k2f(boilingK)))
+	fmt.Println(FToK(KToF(boilingK)))
 }
