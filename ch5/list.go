@@ -22,20 +22,15 @@ func main() {
 	}
 	fmt.Printf("filter: %v\n", filter(slice, even))
 
-	// f := dups()
-	// fmt.Println(bind(slice, f))
+	fmt.Printf("bind:   %v\n", bind(slice, dup))
 }
 
-func dups() func(i int) []int {
-	l := 0
-	return func(value int) []int {
-		l++
-		ls := make([]int, l, l)
-		for i := 0; i<l; i++ {
-			ls[i] = value
-		}
-		return ls
+func dup(n int) []int {
+	res := make([]int, n)
+	for i := 0; i<n; i++ {
+		res[i] = n
 	}
+	return res
 }
 
 func fmap(ls []int, f func(i int) int) []int {
@@ -46,7 +41,6 @@ func fmap(ls []int, f func(i int) int) []int {
 	return res
 }
 
-// TODO implement
 func filter(ls []int, p func(int) bool) []int {
 	res := make([]int, len(ls))
 	pos := 0
@@ -60,5 +54,27 @@ func filter(ls []int, p func(int) bool) []int {
 }
 
 func bind(ls []int, f func(i int) []int) []int {
-	return ls
+	res := make([]int, 0)
+	for _, l := range ls {
+		res = appendInt(res, f(l))
+	}
+	return res
+}
+
+func appendInt(x []int, y []int) []int {
+	var z []int
+    zlen := len(x) + len(y)
+    if zlen <= cap(x) {
+    	z = x[:zlen]
+	} else {
+		zcap := zlen
+		if zcap < 2 * len(x) {
+			zcap = 2 * len(x)
+		}
+		z = make([]int, zlen, zcap)
+		copy(z,x)
+	}
+	copy(z[len(x):], y)
+
+	return z
 }
