@@ -60,7 +60,14 @@ func (list *IntList) Append(other *IntList) *IntList {
 	return list
 }
 
-// TODO fold
+func (list *IntList) Foldl(init int, combine func(x,y int) int) int {
+	var acc = init
+	for l := list; l != nil; l = l.Next {
+		acc = combine(acc, l.Value)
+	}
+	return acc
+}
+
 // TODO fmap
 // TODO filter
 // TODO bind
@@ -75,4 +82,17 @@ func main() {
 
 	l = l.Append(build(4,5,6))
 	fmt.Printf("%v\n", l)
+
+	var add = func(x, y int) int {
+		return x+y
+	}
+	sum := l.Foldl(0, add)
+	fmt.Println(sum)
+
+	var mult = func(x, y int) int {
+		return x*y
+	}
+	prod := l.Foldl(1, mult)
+	fmt.Println(prod)
 }
+
