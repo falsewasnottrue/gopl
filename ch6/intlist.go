@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strconv"
 )
 
 type IntList struct {
@@ -9,17 +10,45 @@ type IntList struct {
 	Next *IntList
 }
 
+// TODO build
+func build(vals ...int) *IntList {
+	l := new (IntList)
+	l.Value = 47
+
+	n := new (IntList)
+	n.Value = 11
+	l.Next = n
+
+	return l
+}
+
+// TODO toString
+func (list *IntList) String() string {
+	if (list == nil) {
+		return "."
+	}
+
+	if (list.Next == nil) {
+		return strconv.Itoa(list.Value) + "."
+	}
+
+	return strconv.Itoa(list.Value) + "," + list.Next.String()
+}
+
 // TODO head
 // TODO tail
 // TODO last
 // TODO append
+// TODO fold
 // TODO fmap
 // TODO filter
 // TODO bind
 
 func main() {
-	l := new (IntList)
-	l.Value = 4711
+	i := 42
+	fmt.Println(string(i))
+
+	l := build(1,2,3)
 
 	fmt.Printf("%v\n", l)
 }
