@@ -12,14 +12,7 @@ type IntList struct {
 
 // TODO build
 func build(vals ...int) *IntList {
-	l := new (IntList)
-	l.Value = 47
-
-	n := new (IntList)
-	n.Value = 11
-	l.Next = n
-
-	return l
+	return nil
 }
 
 // TODO toString
