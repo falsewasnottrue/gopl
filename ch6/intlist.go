@@ -49,9 +49,15 @@ func (list *IntList) Tail() *IntList {
 	return list.Next
 }
 
-// TODO append
 func (list *IntList) Append(other *IntList) *IntList {
+	if (list == nil) {
+		return other
+	}
+	l := list
+	for ; l.Next != nil; l = l.Next {}
+	l.Next = other
 
+	return list
 }
 
 // TODO fold
@@ -66,4 +72,7 @@ func main() {
 	fmt.Println(l.Head())
 	fmt.Printf("%v\n", l.Tail())
 	fmt.Println(l.Tail().Head())
+
+	l = l.Append(build(4,5,6))
+	fmt.Printf("%v\n", l)
 }
