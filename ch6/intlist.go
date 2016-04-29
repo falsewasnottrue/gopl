@@ -92,7 +92,13 @@ func (list* IntList) Filter(p func(x int) bool) *IntList {
 	return head.Append(list.Next.Filter(p))
 }
 
-// TODO bind
+func (list *IntList) Bind(f func(x int) *IntList) *IntList {
+	if (list == nil) {
+		return list
+	}
+
+	return f(list.Head()).Append(list.Next.Bind(f))
+}
 
 func main() {
 	l := build(1,2,3)
@@ -105,6 +111,7 @@ func main() {
 	l = l.Append(build(4,5,6))
 	fmt.Printf("%v\n", l)
 
+	// foldl
 	var add = func(x, y int) int {
 		return x+y
 	}
@@ -117,12 +124,14 @@ func main() {
 	prod := l.Foldl(1, mult)
 	fmt.Println(prod)
 
+	// fmap
 	var addOne = func(x int) int {
 		return x+1
 	}
 	fmt.Printf("%v\n", l.FMap(addOne))
 	fmt.Printf("%v\n", l)
 
+	// filter
 	var isEven = func(n int) bool {
 		return n % 2 == 0
 	}
@@ -132,5 +141,11 @@ func main() {
 		return n % 2 == 1
 	}
 	fmt.Printf("%v\n", l.Filter(isOdd))
+
+	// bind
+	var expand = func(n int) *IntList {
+		return build(n, n)
+	}
+	fmt.Printf("%v\n", l.Bind(expand))
 }
 
