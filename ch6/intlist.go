@@ -74,11 +74,24 @@ func (list *IntList) FMap(f func(x int) int) *IntList {
 	}
 	var head = new (IntList)
 	head.Value = f(list.Value)
-	
+
 	return head.Append(list.Next.FMap(f))
 }
 
-// TODO filter
+func (list* IntList) Filter(p func(x int) bool) *IntList {
+	if (list == nil) {
+		return nil
+	}
+	if (p(list.Value) == false) {
+		return list.Next.Filter(p)
+	}
+
+	// p(list.Value) == true
+	var head = new (IntList)
+	head.Value = list.Value
+	return head.Append(list.Next.Filter(p))
+}
+
 // TODO bind
 
 func main() {
@@ -108,5 +121,16 @@ func main() {
 		return x+1
 	}
 	fmt.Printf("%v\n", l.FMap(addOne))
+	fmt.Printf("%v\n", l)
+
+	var isEven = func(n int) bool {
+		return n % 2 == 0
+	}
+	fmt.Printf("%v\n", l.Filter(isEven))
+
+	var isOdd = func(n int) bool {
+		return n % 2 == 1
+	}
+	fmt.Printf("%v\n", l.Filter(isOdd))
 }
 
