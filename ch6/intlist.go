@@ -68,7 +68,16 @@ func (list *IntList) Foldl(init int, combine func(x,y int) int) int {
 	return acc
 }
 
-// TODO fmap
+func (list *IntList) FMap(f func(x int) int) *IntList {
+	if (list == nil) {
+		return nil
+	}
+	var head = new (IntList)
+	head.Value = f(list.Value)
+	
+	return head.Append(list.Next.FMap(f))
+}
+
 // TODO filter
 // TODO bind
 
@@ -94,5 +103,10 @@ func main() {
 	}
 	prod := l.Foldl(1, mult)
 	fmt.Println(prod)
+
+	var addOne = func(x int) int {
+		return x+1
+	}
+	fmt.Printf("%v\n", l.FMap(addOne))
 }
 
