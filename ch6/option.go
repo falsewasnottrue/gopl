@@ -11,7 +11,7 @@ type IntOption interface {
 
 	Filter(p func(val int) bool) IntOption
 	FMap(f func(val int) int) IntOption
-	// TODO Bind
+	Bind(f func(val int) IntOption) IntOption
 }
 
 // --- Some
@@ -43,6 +43,10 @@ func (ctx Some) FMap(f func(val int) int) IntOption {
 	return Some{value : f(ctx.value)}
 }
 
+func (ctx Some) Bind(f func(val int) IntOption) IntOption {
+	return f(ctx.value)
+}
+
 // --- None
 type None struct {}
 
@@ -66,6 +70,10 @@ func (ctx None) FMap(f func(val int) int) IntOption {
 	return ctx // None
 }
 
+func (ctx None) Bind(f func(val int) IntOption) IntOption {
+	return ctx // None
+}
+
 // ---
 func main() {
 	var isEven = func(val int) bool {
@@ -76,6 +84,13 @@ func main() {
 	}
 	var addOne = func(val int) int {
 		return val + 1
+	}
+	var checkEven = func(val int) IntOption {
+		if isEven(val) {
+			return Some{value: val}
+		} else {
+			return None {}
+		}
 	}
 
 	// ---
@@ -89,6 +104,8 @@ func main() {
 	fmt.Printf("Some(1).filter(isOdd): %v\n", someone.Filter(isOdd))
 
 	fmt.Printf("Some(1).map(+1): %v\n", someone.FMap(addOne))
+	fmt.Printf("Some(1).bind(checkEven) %v\n", someone.Bind(checkEven))
+	fmt.Printf("Some(2).bind(checkEven) %v\n", Some{value: 2}.Bind(checkEven))
 
 	// ---
 
@@ -98,5 +115,5 @@ func main() {
 	// fmt.Println(noone.Get()) -> panic
 	fmt.Printf("None.getOrElse(42): %v\n", noone.GetOrElse(42))
 	fmt.Printf("None.map(+1): %v\n", noone.FMap(addOne))
-
+	fmt.Printf("None.bind(checkEven): %v\n", noone.Bind(checkEven))
 }
