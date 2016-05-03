@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	// "fmt"
 	"strconv"
 )
 
@@ -72,48 +72,4 @@ func (ctx None) FMap(f func(val int) int) IntOption {
 
 func (ctx None) Bind(f func(val int) IntOption) IntOption {
 	return ctx // None
-}
-
-// ---
-func main() {
-	var isEven = func(val int) bool {
-		return val % 2 == 0
-	}
-	var isOdd = func(val int) bool {
-		return val % 2 == 1
-	}
-	var addOne = func(val int) int {
-		return val + 1
-	}
-	var checkEven = func(val int) IntOption {
-		if isEven(val) {
-			return Some{value: val}
-		} else {
-			return None {}
-		}
-	}
-
-	// ---
-	var someone = Some{value: 1}
-	
-	fmt.Printf("%t %v\n", someone, someone)
-	fmt.Printf("Some(1).get: %v\n", someone.Get())
-	fmt.Println("Some(1).getOrElse(42): %v\n", someone.GetOrElse(42))
-
-	fmt.Printf("Some(1).filter(isEven): %v\n", someone.Filter(isEven))
-	fmt.Printf("Some(1).filter(isOdd): %v\n", someone.Filter(isOdd))
-
-	fmt.Printf("Some(1).map(+1): %v\n", someone.FMap(addOne))
-	fmt.Printf("Some(1).bind(checkEven) %v\n", someone.Bind(checkEven))
-	fmt.Printf("Some(2).bind(checkEven) %v\n", Some{value: 2}.Bind(checkEven))
-
-	// ---
-
-	var noone = None{}
-
-	fmt.Printf("%t %v\n", noone, noone)
-	// fmt.Println(noone.Get()) -> panic
-	fmt.Printf("None.getOrElse(42): %v\n", noone.GetOrElse(42))
-	fmt.Printf("None.map(+1): %v\n", noone.FMap(addOne))
-	fmt.Printf("None.bind(checkEven): %v\n", noone.Bind(checkEven))
 }

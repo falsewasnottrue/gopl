@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"strconv"
 )
 
@@ -40,6 +39,13 @@ func (list *IntList) Head() int {
 		panic("no head on empty list")
 	}
 	return list.Value
+}
+
+func (list *IntList) HeadOption() IntOption {
+	if (list == nil) {
+		return None{}
+	}
+	return Some{value: list.Value}
 }
 
 func (list *IntList) Tail() *IntList {
@@ -99,53 +105,3 @@ func (list *IntList) Bind(f func(x int) *IntList) *IntList {
 
 	return f(list.Head()).Append(list.Next.Bind(f))
 }
-
-func main() {
-	l := build(1,2,3)
-
-	fmt.Printf("%v\n", l)
-	fmt.Println(l.Head())
-	fmt.Printf("%v\n", l.Tail())
-	fmt.Println(l.Tail().Head())
-
-	l = l.Append(build(4,5,6))
-	fmt.Printf("%v\n", l)
-
-	// foldl
-	var add = func(x, y int) int {
-		return x+y
-	}
-	sum := l.Foldl(0, add)
-	fmt.Println(sum)
-
-	var mult = func(x, y int) int {
-		return x*y
-	}
-	prod := l.Foldl(1, mult)
-	fmt.Println(prod)
-
-	// fmap
-	var addOne = func(x int) int {
-		return x+1
-	}
-	fmt.Printf("%v\n", l.FMap(addOne))
-	fmt.Printf("%v\n", l)
-
-	// filter
-	var isEven = func(n int) bool {
-		return n % 2 == 0
-	}
-	fmt.Printf("%v\n", l.Filter(isEven))
-
-	var isOdd = func(n int) bool {
-		return n % 2 == 1
-	}
-	fmt.Printf("%v\n", l.Filter(isOdd))
-
-	// bind
-	var expand = func(n int) *IntList {
-		return build(n, n)
-	}
-	fmt.Printf("%v\n", l.Bind(expand))
-}
-
