@@ -24,12 +24,24 @@ var expand = func(n int) *IntList {
 	return build(n, n)
 }
 
+var expandSet = func(n int) IntSet {
+	res := EmptySet()
+	res.Add(n)
+	res.Add(n+1)
+	res.Add(n-1)
+	return res
+}
+
 var add = func(x, y int) int {
 	return x+y
 }
 
 var addOne = func(x int) int {
 	return x+1
+}
+
+var const0 = func(x int) int {
+	return 0
 }
 
 var mult = func(x, y int) int {
@@ -98,4 +110,11 @@ func main() {
 
 	intSet.Remove(1)
 	fmt.Printf("{2}: %v\n", intSet)
+
+	fmt.Printf("{1,2}.map(+1): %v\n", EmptySet().Add(1).Add(2).FMap(addOne))
+	fmt.Printf("{1,2}.map(const0): %v\n", EmptySet().Add(1).Add(2).FMap(const0))
+	fmt.Printf("{1,2}.filter(even): %v\n", EmptySet().Add(1).Add(2).Filter(isEven))
+	fmt.Printf("{1,2}.filter(odd): %v\n", EmptySet().Add(1).Add(2).Filter(isOdd))
+
+	fmt.Printf("{1,2}.bind(expandSet) %v\n", EmptySet().Add(1).Add(2).Bind(expandSet))
 }
