@@ -4,89 +4,98 @@ import (
 	"fmt"
 )
 
+var isEven = func(n int) bool {
+	return n % 2 == 0
+}
+
+var isOdd = func(n int) bool {
+	return n % 2 == 1
+}
+
+var checkEven = func(val int) IntOption {
+	if isEven(val) {
+		return Some{value: val}
+	} else {
+		return None {}
+	}
+}
+
+var expand = func(n int) *IntList {
+	return build(n, n)
+}
+
+var add = func(x, y int) int {
+	return x+y
+}
+
+var addOne = func(x int) int {
+	return x+1
+}
+
+var mult = func(x, y int) int {
+	return x*y
+}
+
 func main() {
 	fmt.Println("IntList test suite")
 
 	l := build(1,2,3)
 
-	fmt.Printf("%v\n", l)
-	fmt.Println(l.Head())
-	fmt.Printf("%v\n", l.Tail())
-	fmt.Println(l.Tail().Head())
+	fmt.Printf("IntList l1: %v\n", l)
+	fmt.Printf("l1.Head: %v\n", l.Head())
+	fmt.Printf("l1.HeadOption: %v\n", l.HeadOption())
+	fmt.Printf("l1.Tail: %v\n", l.Tail())
+	fmt.Printf("l1.Tail.Head: %v\n", l.Tail().Head())
 
 	l = l.Append(build(4,5,6))
-	fmt.Printf("%v\n", l)
+	fmt.Printf("l1.Append(4,5,6): %v\n", l)
 
-	// foldl
-	var add = func(x, y int) int {
-		return x+y
-	}
 	sum := l.Foldl(0, add)
-	fmt.Println(sum)
-
-	var mult = func(x, y int) int {
-		return x*y
-	}
+	fmt.Printf("l1.Foldl(0, add): %v\n", sum)
 	prod := l.Foldl(1, mult)
-	fmt.Println(prod)
 
-	// fmap
-	var addOne = func(x int) int {
-		return x+1
-	}
-	fmt.Printf("%v\n", l.FMap(addOne))
-	fmt.Printf("%v\n", l)
-
-	// filter
-	var isEven = func(n int) bool {
-		return n % 2 == 0
-	}
-	fmt.Printf("%v\n", l.Filter(isEven))
-
-	var isOdd = func(n int) bool {
-		return n % 2 == 1
-	}
-	fmt.Printf("%v\n", l.Filter(isOdd))
-
-	// bind
-	var expand = func(n int) *IntList {
-		return build(n, n)
-	}
-	fmt.Printf("%v\n", l.Bind(expand))
+	fmt.Printf("l1.Foldl(1, mult): %v\n", prod)
+	fmt.Printf("l1.FMap(addOne): %v\n", l.FMap(addOne))
+	fmt.Printf("l1: %v\n", l)
+	fmt.Printf("l1.Filter(isEven): %v\n", l.Filter(isEven))
+	fmt.Printf("l1.Filter(isOdd): %v\n", l.Filter(isOdd))
+	fmt.Printf("l1.Bind(expand): %v\n", l.Bind(expand))
 
 	// ---
+	fmt.Printf("\nIntOption test suite\n")
 
-	fmt.Println("IntOption test suite")
+	var maybeInt IntOption
 
-	var checkEven = func(val int) IntOption {
-		if isEven(val) {
-			return Some{value: val}
-		} else {
-			return None {}
-		}
-	}
-
-	// ---
-	var someone = Some{value: 1}
+	maybeInt = Some{value: 1}
 	
-	fmt.Printf("%t %v\n", someone, someone)
-	fmt.Printf("Some(1).get: %v\n", someone.Get())
-	fmt.Println("Some(1).getOrElse(42): %v\n", someone.GetOrElse(42))
+	fmt.Printf("Some(1).get: %v\n", maybeInt.Get())
+	fmt.Printf("Some(1).getOrElse(42): %v\n", maybeInt.GetOrElse(42))
 
-	fmt.Printf("Some(1).filter(isEven): %v\n", someone.Filter(isEven))
-	fmt.Printf("Some(1).filter(isOdd): %v\n", someone.Filter(isOdd))
+	fmt.Printf("Some(1).filter(isEven): %v\n", maybeInt.Filter(isEven))
+	fmt.Printf("Some(1).filter(isOdd): %v\n", maybeInt.Filter(isOdd))
 
-	fmt.Printf("Some(1).map(+1): %v\n", someone.FMap(addOne))
-	fmt.Printf("Some(1).bind(checkEven) %v\n", someone.Bind(checkEven))
+	fmt.Printf("Some(1).map(+1): %v\n", maybeInt.FMap(addOne))
+	fmt.Printf("Some(1).bind(checkEven) %v\n", maybeInt.Bind(checkEven))
 	fmt.Printf("Some(2).bind(checkEven) %v\n", Some{value: 2}.Bind(checkEven))
 
-	// ---
-
-	var noone = None{}
-
-	fmt.Printf("%t %v\n", noone, noone)
+	maybeInt = None{}
 	// fmt.Println(noone.Get()) -> panic
-	fmt.Printf("None.getOrElse(42): %v\n", noone.GetOrElse(42))
-	fmt.Printf("None.map(+1): %v\n", noone.FMap(addOne))
-	fmt.Printf("None.bind(checkEven): %v\n", noone.Bind(checkEven))
+	fmt.Printf("None.getOrElse(42): %v\n", maybeInt.GetOrElse(42))
+	fmt.Printf("None.map(+1): %v\n", maybeInt.FMap(addOne))
+	fmt.Printf("None.bind(checkEven): %v\n", maybeInt.Bind(checkEven))
+
+	// ---
+	fmt.Printf("\nIntSet test suite\n")
+
+	var intSet IntSet = EmptySet()
+	fmt.Printf("emptySet: %v\n", intSet)
+	intSet.Add(1)
+	fmt.Printf("{1}: %v\n", intSet)
+	intSet.Add(1)
+	fmt.Printf("{1}: %v\n", intSet)
+	intSet.Add(2)
+	fmt.Printf("{1,2}: %v\n", intSet)
+
+	intSet.Remove(1)
+	fmt.Printf("{2}: %v\n", intSet)
 }
