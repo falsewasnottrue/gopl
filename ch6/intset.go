@@ -80,4 +80,16 @@ func (ctx IntSet) Bind(f func(val int) IntSet) IntSet {
 	}
 	return res
 }
-// ToList
+
+func (ctx IntSet) ToList() IntList {
+	var res *IntList
+	for k, v := range ctx {
+		if (v) {
+			elem := new (IntList)
+			elem.Value = k
+			res = res.Append(elem)
+		}
+	}
+
+	return *res
+}

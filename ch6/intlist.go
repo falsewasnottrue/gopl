@@ -55,6 +55,12 @@ func (list *IntList) Tail() *IntList {
 	return list.Next
 }
 
+func (list *IntList) Size() int {
+	if (list == nil) {
+		return 0
+	}
+	return 1 + list.Next.Size()
+}
 func (list *IntList) Append(other *IntList) *IntList {
 	if (list == nil) {
 		return other
@@ -104,4 +110,12 @@ func (list *IntList) Bind(f func(x int) *IntList) *IntList {
 	}
 
 	return f(list.Head()).Append(list.Next.Bind(f))
+}
+
+func (list *IntList) ToSet() IntSet {
+	res := EmptySet()
+	for l := list; l != nil; l = l.Next {
+		res.Add(l.Value)
+	}
+	return res
 }

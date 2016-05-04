@@ -73,6 +73,8 @@ func main() {
 	fmt.Printf("l1.Filter(isOdd): %v\n", l.Filter(isOdd))
 	fmt.Printf("l1.Bind(expand): %v\n", l.Bind(expand))
 
+	fmt.Printf("List(1,1,2,3,3).toSet: %v\n", build(1,1,2,3,3).ToSet())
+
 	// ---
 	fmt.Printf("\nIntOption test suite\n")
 
@@ -117,4 +119,6 @@ func main() {
 	fmt.Printf("{1,2}.filter(odd): %v\n", EmptySet().Add(1).Add(2).Filter(isOdd))
 
 	fmt.Printf("{1,2}.bind(expandSet) %v\n", EmptySet().Add(1).Add(2).Bind(expandSet))
+
+	fmt.Printf("{1,2}.toList: %v\n", EmptySet().Add(1).Add(2).ToList())
 }
