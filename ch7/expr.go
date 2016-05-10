@@ -1,6 +1,7 @@
 package eval
 
 import (
+	"strconv"
 	"math"
 )
 
@@ -10,6 +11,7 @@ type Env map[Var]float64
 
 type Expr interface {
 	Evaluate(env Env) float64
+	String() string
 }
 
 // Variable
@@ -19,11 +21,19 @@ func (v Var) Evaluate(env Env) float64 {
 	return env[v]
 }
 
+func (v Var) String() string {
+	return string(v);
+}
+
 // literal
 type literal float64
 
 func (l literal) Evaluate(env Env) float64 {
 	return float64(l)
+}
+
+func (l literal) String() string {
+	return strconv.FormatFloat(float64(l), 'f', 6, 64)
 }
 
 // unary
@@ -39,6 +49,10 @@ func (u unary) Evaluate(env Env) float64 {
 		return u.expr.Evaluate(env) * (-1)
 	}
 	panic("unknown operator: " + string(u.op))
+}
+
+func (u unary) String() string {
+	return string(u.op) + u.expr.String()
 }
 
 // binary
@@ -63,6 +77,10 @@ func (b binary) Evaluate(env Env) float64 {
 	panic("unknown operator: " + string(b.op))
 }
 
+func (b binary) String() string {
+	return b.l.String() + string(b.op) + b.r.String()
+}
+
 // call (sin, sqrt, pow)
 type call struct {
 	op string
@@ -80,4 +98,8 @@ func (c call) Evaluate(env Env) float64 {
 		return math.Pow(ev, 2);
 	}
 	panic("unknown operator " + c.op)
+}
+
+func (c call) String() string {
+	return c.op + "(" + c.expr.String() + ")"
 }
