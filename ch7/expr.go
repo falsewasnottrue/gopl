@@ -81,4 +81,3 @@ func (c call) Evaluate(env Env) float64 {
 	}
 	panic("unknown operator " + c.op)
 }
-// TODO Parse
