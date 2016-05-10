@@ -1,4 +1,4 @@
-package eval
+package main
 
 import (
 	"strconv"
