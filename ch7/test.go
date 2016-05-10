@@ -26,8 +26,24 @@ func main() {
 		// {"5 / 9 * (F - 32)", Env{"F": -40}, "-40"},
 		// {"5 / 9 * (F - 32)", Env{"F": 32}, "0"},
 		// {"5 / 9 * (F - 32)", Env{"F": 212}, "100"},
-		// {"-1 + -x", Env{"x": 1}, "-2"},
-		// {"-1 - x", Env{"x": 1}, "-2"},
+		{"-1 + -x",
+		binary {
+			op: '+',
+			l: unary {
+				op: '-',
+				expr: literal(1)},
+			r: unary {
+				op: '-',
+				expr: Var("x")}},	
+		 Env{"x": 1}, "-2"},
+		{"-1 - x", 
+		binary {
+			op: '-',
+			l: unary {
+				op: '-',
+				expr: literal(1)},
+			r: Var("x")},
+		Env{"x": 1}, "-2"},
 	}
 
 	for _, test := range tests {

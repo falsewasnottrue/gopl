@@ -78,7 +78,7 @@ func (b binary) Evaluate(env Env) float64 {
 }
 
 func (b binary) String() string {
-	return b.l.String() + string(b.op) + b.r.String()
+	return b.l.String() + " " + string(b.op) + " " + b.r.String()
 }
 
 // call (sin, sqrt, pow)
