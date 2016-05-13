@@ -5,6 +5,7 @@ import (
 	"net"
 	"log"
 	"bufio"
+	"time"
 )
 
 func main() {
@@ -27,10 +28,16 @@ func main() {
 func handleConnection(c net.Conn) {
 	input := bufio.NewScanner(c)
 	for input.Scan() {
-		// echo(c, input.Text(), 1*time.Second)
-		fmt.Printf("received %v\n", input.Text())
+		echo(c, input.Text(), 1*time.Second)
 	}
 	// NOTE: ignoring potential errors from input.Err()
 	c.Close()
 }
 
+func echo(c net.Conn, input string, delay time.Duration) {
+	fmt.Fprintln(c, input)
+	time.Sleep(delay)
+	fmt.Fprintln(c, input)
+	time.Sleep(delay)
+	fmt.Fprintln(c, input)
+}
